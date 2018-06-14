@@ -2,51 +2,52 @@ import sys
 import csv
 import difflib
 
-path_to_data = 'FNDDS-CNF/Data/'
+data_path = 'Data/'																	
+
+with open(data_path + 'CNF.FOOD.NAME.csv', encoding='utf-8', errors='ignore') as cnf_file:
+	cnf_reader = csv.reader(cnf_file)
+	with open(data_path + 'CNF-FNDDS.matches.csv', 'w+') as new_file:
+		fieldnames = ['Canadian Food', 'US Matches']
+		new_writer = csv.DictWriter(new_file, fieldnames)
+		new_writer.writeheader()
+
+		count = 0
+
+		for cnf_row in cnf_reader:
+			if (count == 0): count = 1; continue														# do not include header row
+			# if (count == 10): break																	# limits how much gets processed
+
+			with open(data_path + 'FNDDS.main.food.desc.csv') as fndds_file:
+				fndds_reader = csv.reader(fndds_file)															
+				new_row = {'Canadian Food': cnf_row[4]}																				
+				top_three = [[0, "", 0], [0, "", 0], [0, "", 0]]																		
+
+				for fndds_row in fndds_reader:																	
+					sequence = difflib.SequenceMatcher(isjunk=None, a=cnf_row[4], b=fndds_row[3])		# compare each FNDDS row to the current CNF row		 	
+					difference = sequence.ratio()*100													# express as floating point percentage
+
+					if (difference > 60) :																# only list > 60% similarity
+						for i in range(0,3):
+							if (difference > top_three[i][0]):											# arrange top three > 60%
+								top_three[i] = [difference, fndds_row[3], fndds_row[0]]					# TODO: inlclude ties?
+								break	
+			count += 1
 
 
-cnf = open(path_to_data + 'CNF.FOOD.NAME.csv', encoding='utf-8', errors='ignore') 
-csv_cnf = csv.reader(cnf)															
+			new_row_text = ""
+			for item in top_three:
+				if (item[2] != 0) :																		# do not list empty top_three values
+					new_row_text += str(item[1]) + '(' + str(round(item[0], 2)) + '% match ' + '#' + str(item[2]) + '); '
+				
+			new_row['US Matches'] = new_row_text
+			new_writer.writerow(new_row)
+					
 
-cnf_food_row_num = 4
-fndds_food_row_num = 3
 
-converged_database = {}
-new_file = open('new_csv.csv', 'w+')
-fieldnames = ['Canadian Food', 'US Matches']
-new_csv = csv.DictWriter(new_file, fieldnames)
-new_csv.writeheader()
 
-count = 0
 
-for cnf_row in csv_cnf:
-	if (count == 0): count = 1; continue
-	if (count == 50): break
-
-	fndds = open(path_to_data + 'FNDDS.main.food.desc.csv')  									
-	csv_fndds = csv.reader(fndds)															
-	newrow = {'Canadian Food': cnf_row[4]}																				
-	top_three = [[0, "", 0], [0, "", 0], [0, "", 0]]																		
-
-	for fndds_row in csv_fndds:																	
-		sequence = difflib.SequenceMatcher(isjunk=None, a=cnf_row[4], b=fndds_row[3])			 	
-		difference = sequence.ratio()*100
-
-		for i in range(0,3):
-			if (difference > top_three[i][0]):
-				top_three[i] = [difference, fndds_row[3], fndds_row[0]]
-				break	
-	fndds.close()
-
-	newrow_text = ""
-	for item in top_three:
-		newrow_text += item[1] + '(' + str(round(item[0], 2)) + '% match ' + '#' + item[2] + '); '
-	newrow['US Matches'] = newrow_text
-	new_csv.writerow(newrow)
-	count += 1
-
-	
-	
+		
+		
 
 
 
