@@ -4,7 +4,14 @@ import difflib
 
 data_path = 'Data/'		
 
+def prepare_string(str):
+	str = str.replace(',', '')
+	str = str.lower()
+	return str
+
 def get_similarity_percentage(a, b):
+	prepare_string(a)
+	prepare_string(b)
 	sequence = difflib.SequenceMatcher(isjunk=None, a=a, b=b)
 	return sequence.ratio()*100			
 
@@ -45,7 +52,7 @@ with open(data_path + 'CNF.FOOD.NAME.csv', encoding='utf-8', errors='ignore') as
 		count = 0
 		for cnf_row in cnf_reader:
 			if (count == 0): count = 1; continue														# do not include header row
-			# if (count == 10): break																	# limits how much gets processed
+			if (count == 50): break																	# limits how much gets processed
 
 
 			with open(data_path + 'FNDDS.main.food.desc.csv') as fndds_file:
