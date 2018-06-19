@@ -1,4 +1,4 @@
-match_file <- read.csv(file="FNDDS-CNF/Data/CNF-FNDDS.matches.csv", head=TRUE, sep=",")
+match_file <- read.csv(file="Data/CNF-FNDDS.matches.csv", head=TRUE, sep=",")
 
 exact_match <- 0
 no_match <- 0
