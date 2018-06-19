@@ -41,28 +41,30 @@ def write_new_row(top_three_matches, new_row, new_writer):
 	new_row['US Matches'] = new_row_text
 	new_writer.writerow(new_row)
 
-with open(data_path + 'CNF.FOOD.NAME.csv', encoding='utf-8', errors='ignore') as cnf_file:
-	cnf_reader = csv.reader(cnf_file)
+with open(data_path + 'UKfoodlist.csv', encoding='utf-8', errors='ignore') as compared_file:
+	compared_reader = csv.reader(compared_file)
 
-	with open(data_path + 'CNF-FNDDS.matches.csv', 'w+') as new_file:
-		fieldnames = ['Canadian Food', 'US Matches']
+	with open(data_path + 'UK-FNDDS.matches.csv', 'w+') as new_file:
+		fieldnames = ['UK Food', 'US Matches']
 		new_writer = csv.DictWriter(new_file, fieldnames)
 		new_writer.writeheader()
 
 		count = 0
-		for cnf_row in cnf_reader:
+		
+		# end = 0.0
+		for compared_row in compared_reader:
 			if (count == 0): count = 1; continue														# do not include header row
 			if (count == 50): break																	# limits how much gets processed
 
 
 			with open(data_path + 'FNDDS.main.food.desc.csv') as fndds_file:
 				fndds_reader = csv.reader(fndds_file)															
-				new_row = {'Canadian Food': cnf_row[4]}																				
+				new_row = {'UK Food': compared_row[1]}																				
 				top_three = [[0, "", 0], [0, "", 0], [0, "", 0]]	
 
 				match_count = 0
 				for fndds_row in fndds_reader:
-					find_match(cnf_row[4], fndds_row[3], fndds_row[0], top_three)	
+					find_match(compared_row[1], fndds_row[3], fndds_row[0], top_three)
 					print("Finding matches for row: " + str(count) + " (in row " + str(match_count) + ")", end='\r', flush=True)
 					match_count += 1
 
