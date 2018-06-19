@@ -51,10 +51,9 @@ with open(data_path + 'UKfoodlist.csv', encoding='utf-8', errors='ignore') as co
 
 		count = 0
 		
-		# end = 0.0
 		for compared_row in compared_reader:
 			if (count == 0): count = 1; continue														# do not include header row
-			if (count == 50): break																	# limits how much gets processed
+		#	if (count == 50): break																	# limits how much gets processed
 
 
 			with open(data_path + 'FNDDS.main.food.desc.csv') as fndds_file:
