@@ -1,4 +1,4 @@
-match_file <- read.csv(file="Data/CNF-FNDDS.matches.csv", head=TRUE, sep=",")
+match_file <- read.csv(file="Data/UK-FNDDS.matches.csv", head=TRUE, sep=",")
 
 exact_match <- 0
 no_match <- 0
@@ -33,8 +33,8 @@ H <- c(no_match, exact_match)
 names <- c("No Match", "Exact Match")
 
 
-barplot(H, ylab = "Percentage of dataset (%)", names.arg=names , main="CNF-FNDDS results")
-text(.75, 50, round(no_match, 2))
+barplot(H, ylab = "Percentage of dataset (%)", names.arg=names , main="UK-FNDDS results")
+text(.75, 35, round(no_match, 2))
 text(1.75, 5, round(exact_match, 2))
 
 
