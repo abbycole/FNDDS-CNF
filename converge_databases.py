@@ -5,7 +5,7 @@ import difflib, time
 data_path = 'Data/'		
 
 def prepare_string(str):
- 	str = str.replace(',', '')
+	str = str.replace(',', '')
 	str = str.lower()
 	list = str.split()
 	list.sort()
