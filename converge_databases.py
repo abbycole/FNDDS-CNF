@@ -5,16 +5,13 @@ import difflib, time
 data_path = 'Data/'		
 
 def prepare_string(str):
-	print(str)
-	str = str.replace(',', '')
+ 	str = str.replace(',', '')
 	str = str.lower()
 	list = str.split()
 	list.sort()
 	str = ""
 	for word in list:
 		str += word + " "
-	print(str)
-	time.sleep(1)
 	return str
 
 def get_similarity_percentage(a, b):
