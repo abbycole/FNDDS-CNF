@@ -1,12 +1,20 @@
 import sys
 import csv
-import difflib
+import difflib, time
 
 data_path = 'Data/'		
 
 def prepare_string(str):
+	print(str)
 	str = str.replace(',', '')
 	str = str.lower()
+	list = str.split()
+	list.sort()
+	str = ""
+	for word in list:
+		str += word + " "
+	print(str)
+	time.sleep(1)
 	return str
 
 def get_similarity_percentage(a, b):
@@ -53,8 +61,7 @@ with open(data_path + 'UKfoodlist.csv', encoding='utf-8', errors='ignore') as co
 		
 		for compared_row in compared_reader:
 			if (count == 0): count = 1; continue														# do not include header row
-		#	if (count == 50): break																	# limits how much gets processed
-
+			if (count == 50): break																	# limits how much gets processed
 
 			with open(data_path + 'FNDDS.main.food.desc.csv') as fndds_file:
 				fndds_reader = csv.reader(fndds_file)															
